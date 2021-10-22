@@ -13,6 +13,7 @@
     "url": "git://github.com/re-arc-lab/expo-secure-store-prefix.git"
   },
   "author": "rearclab-arai <arai.yuma@re-arc-lab.jp>",
+  "homepage": "https://github.com/re-arc-lab/expo-secure-store-prefix",
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
@@ -24,5 +25,8 @@
     "secure",
     "store"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "expo-module-scripts": "^2.0.0"
+  }
 }

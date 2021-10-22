@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.author         = package['author']
   s.homepage       = package['homepage']
   s.platform       = :ios, '11.0'
-  s.source         = { git: 'https://github.com/expo/expo.git' }
+  s.source         = { git: 'git@github.com:re-arc-lab/expo-secure-store-prefix.git' }
 
   s.dependency 'UMCore'
 
