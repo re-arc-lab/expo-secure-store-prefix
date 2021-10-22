@@ -1,4 +1,4 @@
-package expo.modules.securestore;
+package expo.modules.securestore_10_2;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -47,7 +47,7 @@ import javax.security.auth.x500.X500Principal;
 
 public class SecureStoreModule extends ExportedModule {
   private static final String TAG = "ExpoSecureStore";
-//  private static final String SHARED_PREFERENCES_NAME = "SecureStore";
+  private static final String SHARED_PREFERENCES_NAME = "SecureStore";
   private static final String KEYSTORE_PROVIDER = "AndroidKeyStore";
 
   private static final String ALIAS_PROPERTY = "keychainService";
