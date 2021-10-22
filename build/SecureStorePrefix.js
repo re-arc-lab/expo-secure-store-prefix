@@ -1,5 +1,10 @@
 import { UnavailabilityError } from '@unimodules/core';
-import ExpoSecureStore from './ExpoSecureStore';
+import { Platform } from 'react-native';
+import ExpoSecureStoreWithoutPrefix from './ExpoSecureStore';
+import ExpoSecureStorePrefix from './ExpoSecureStorePrefix';
+// iOS はネイティブレイヤーでは既存の ExpoSecureStore を使う。
+const ExpoSecureStore = Platform.OS === 'ios' ? ExpoSecureStoreWithoutPrefix : ExpoSecureStorePrefix;
+let prefix;
 // @needsAudit
 /**
  * The data in the keychain item cannot be accessed after a restart until the device has been
@@ -53,6 +58,12 @@ const VALUE_BYTES_LIMIT = 2048;
 export async function isAvailableAsync() {
     return !!ExpoSecureStore.getValueWithKeyAsync;
 }
+export async function initAsync(experienceId) {
+    prefix = experienceId;
+    if (!!ExpoSecureStore.initAsync) {
+        await ExpoSecureStore.initAsync(experienceId);
+    }
+}
 // @needsAudit
 /**
  * Delete the value associated with the provided key.
@@ -67,7 +78,7 @@ export async function deleteItemAsync(key, options = {}) {
     if (!ExpoSecureStore.deleteValueWithKeyAsync) {
         throw new UnavailabilityError('SecureStore', 'deleteItemAsync');
     }
-    await ExpoSecureStore.deleteValueWithKeyAsync(key, options);
+    await ExpoSecureStore.deleteValueWithKeyAsync(_getNativeKey(key), options);
 }
 // @needsAudit
 /**
@@ -81,7 +92,7 @@ export async function deleteItemAsync(key, options = {}) {
  */
 export async function getItemAsync(key, options = {}) {
     _ensureValidKey(key);
-    return await ExpoSecureStore.getValueWithKeyAsync(key, options);
+    return await ExpoSecureStore.getValueWithKeyAsync(_getNativeKey(key), options);
 }
 // @needsAudit
 /**
@@ -102,12 +113,16 @@ export async function setItemAsync(key, value, options = {}) {
     if (!ExpoSecureStore.setValueWithKeyAsync) {
         throw new UnavailabilityError('SecureStore', 'setItemAsync');
     }
-    await ExpoSecureStore.setValueWithKeyAsync(value, key, options);
+    await ExpoSecureStore.setValueWithKeyAsync(value, _getNativeKey(key), options);
 }
 function _ensureValidKey(key) {
     if (!_isValidKey(key)) {
         throw new Error(`Invalid key provided to SecureStore. Keys must not be empty and contain only alphanumeric characters, ".", "-", and "_".`);
     }
+}
+function _getNativeKey(key) {
+    // iOS はネイティブレイヤーでは既存の ExpoSecureStore を使うので、ここでキー対応。
+    return Platform.OS === 'ios' ? `${prefix}-${key}` : key;
 }
 function _isValidKey(key) {
     return typeof key === 'string' && /^[\w.-]+$/.test(key);
@@ -141,4 +156,4 @@ function _byteCount(value) {
     }
     return bytes;
 }
-//# sourceMappingURL=SecureStore.js.map
+//# sourceMappingURL=SecureStorePrefix.js.map

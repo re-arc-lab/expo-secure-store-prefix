@@ -55,6 +55,7 @@ export declare type SecureStoreOptions = {
  * on the current device. Currently this resolves `true` on iOS and Android only.
  */
 export declare function isAvailableAsync(): Promise<boolean>;
+export declare function initAsync(experienceId: string): Promise<void>;
 /**
  * Delete the value associated with the provided key.
  *

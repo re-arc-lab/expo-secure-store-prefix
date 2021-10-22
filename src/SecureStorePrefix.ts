@@ -1,6 +1,13 @@
 import { UnavailabilityError } from '@unimodules/core';
+import { Platform } from 'react-native';
 
-import ExpoSecureStore from './ExpoSecureStorePrefix';
+import ExpoSecureStoreWithoutPrefix from './ExpoSecureStore';
+import ExpoSecureStorePrefix from './ExpoSecureStorePrefix';
+
+// iOS はネイティブレイヤーでは既存の ExpoSecureStore を使う。
+const ExpoSecureStore = Platform.OS === 'ios' ? ExpoSecureStoreWithoutPrefix : ExpoSecureStorePrefix;
+
+let prefix: string | undefined;
 
 export type KeychainAccessibilityConstant = number;
 
@@ -87,6 +94,7 @@ export async function isAvailableAsync(): Promise<boolean> {
 }
 
 export async function initAsync(experienceId: string): Promise<void> {
+  prefix = experienceId;
   if (!!ExpoSecureStore.initAsync) {
     await ExpoSecureStore.initAsync(experienceId);
   }
@@ -110,7 +118,7 @@ export async function deleteItemAsync(
   if (!ExpoSecureStore.deleteValueWithKeyAsync) {
     throw new UnavailabilityError('SecureStore', 'deleteItemAsync');
   }
-  await ExpoSecureStore.deleteValueWithKeyAsync(key, options);
+  await ExpoSecureStore.deleteValueWithKeyAsync(_getNativeKey(key), options);
 }
 
 // @needsAudit
@@ -128,7 +136,7 @@ export async function getItemAsync(
   options: SecureStoreOptions = {}
 ): Promise<string | null> {
   _ensureValidKey(key);
-  return await ExpoSecureStore.getValueWithKeyAsync(key, options);
+  return await ExpoSecureStore.getValueWithKeyAsync(_getNativeKey(key), options);
 }
 
 // @needsAudit
@@ -156,7 +164,7 @@ export async function setItemAsync(
   if (!ExpoSecureStore.setValueWithKeyAsync) {
     throw new UnavailabilityError('SecureStore', 'setItemAsync');
   }
-  await ExpoSecureStore.setValueWithKeyAsync(value, key, options);
+  await ExpoSecureStore.setValueWithKeyAsync(value, _getNativeKey(key), options);
 }
 
 function _ensureValidKey(key: string) {
@@ -165,6 +173,11 @@ function _ensureValidKey(key: string) {
       `Invalid key provided to SecureStore. Keys must not be empty and contain only alphanumeric characters, ".", "-", and "_".`
     );
   }
+}
+
+function _getNativeKey(key: string) {
+  // iOS はネイティブレイヤーでは既存の ExpoSecureStore を使うので、ここでキー対応。
+  return Platform.OS === 'ios' ? `${prefix}-${key}` : key;
 }
 
 function _isValidKey(key: string) {
