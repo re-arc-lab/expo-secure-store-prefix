@@ -26,7 +26,12 @@
     "store"
   ],
   "license": "MIT",
+  "peerDependencies": {
+    "@unimodules/core": "*"
+  },
   "devDependencies": {
+    "@unimodules/core": "~7.1.1",
+    "@unimodules/react-native-adapter": "^6.3.9",
     "expo-module-scripts": "^2.0.0"
   }
 }
