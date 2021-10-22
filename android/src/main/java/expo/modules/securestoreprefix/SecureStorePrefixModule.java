@@ -10,7 +10,7 @@ import android.util.Log;
 import org.unimodules.core.Promise;
 import org.unimodules.core.interfaces.ExpoMethod;
 
-import expo.modules.securestore.SecureStoreModule;
+import expo.modules.securestore_10_2.SecureStoreModule;
 
 
 public class SecureStorePrefixModule extends SecureStoreModule {
@@ -35,6 +35,6 @@ public class SecureStorePrefixModule extends SecureStoreModule {
   }
 
   protected SharedPreferences getSharedPreferences() {
-    return getContext().getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    return getContext().getSharedPreferences(mExperienceId + "-" +  SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
   }
 }

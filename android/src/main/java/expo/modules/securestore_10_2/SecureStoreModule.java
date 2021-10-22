@@ -1,4 +1,4 @@
-package expo.modules.securestore;
+package expo.modules.securestore_10_2;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
