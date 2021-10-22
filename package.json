@@ -1,0 +1,28 @@
+{
+  "name": "expo-secure-store-prefix",
+  "version": "0.0.1",
+  "description": "Provides a way to encrypt and securely store key–value pairs locally on the device.",
+  "main": "build/SecureStore.js",
+  "types": "build/SecureStore.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/re-arc-lab/expo-secure-store-prefix.git"
+  },
+  "author": "rearclab-arai <arai.yuma@re-arc-lab.jp>",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-secure-store",
+    "secure",
+    "store"
+  ],
+  "license": "MIT"
+}
