@@ -1,0 +1,48 @@
+name: publish @re-arc-lab/expo-secure-store-prefix
+
+env:
+ CI: true
+
+on:
+ push:
+   branches:
+     - main
+   tags:
+     - "!*"
+
+jobs:
+ publish:
+   name: Setup
+   runs-on: ubuntu-latest
+   steps:
+     - name: checkout
+       uses: actions/checkout@v2
+    
+     - name: setup node
+       uses: actions/setup-node@v1
+       with:
+         node-version: 16.x
+         registry-url: https://npm.pkg.github.com
+
+     - name: install node_modules
+       run: yarn install
+
+     - name: build
+       run: yarn build
+
+     - name: publish
+       run: npx can-npm-publish --verbose && npm publish || echo "No need to publish"
+       env:
+         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+     - name: set version to env
+       run: node -p -e '`VERSION=${require("./package.json").version}`' >> $GITHUB_ENV
+
+     - name: add version tag
+       uses: pkgdeps/git-tag-action@v2
+       with:
+         version: ${{ env.VERSION }}
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         github_repo: ${{ github.repository }}
+         git_commit_sha: ${{ github.sha }}
+         git_tag_prefix: "v"
