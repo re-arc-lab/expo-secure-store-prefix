@@ -1,5 +1,5 @@
 export default {
   get name(): string {
-    return 'ExpoSecureStore';
+    return 'ExpoSecureStorePrefix';
   },
 };

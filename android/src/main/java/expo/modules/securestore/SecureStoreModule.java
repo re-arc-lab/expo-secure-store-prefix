@@ -47,7 +47,7 @@ import javax.security.auth.x500.X500Principal;
 
 public class SecureStoreModule extends ExportedModule {
   private static final String TAG = "ExpoSecureStore";
-  private static final String SHARED_PREFERENCES_NAME = "SecureStore";
+//  private static final String SHARED_PREFERENCES_NAME = "SecureStore";
   private static final String KEYSTORE_PROVIDER = "AndroidKeyStore";
 
   private static final String ALIAS_PROPERTY = "keychainService";
@@ -88,7 +88,7 @@ public class SecureStoreModule extends ExportedModule {
       return;
     }
 
-    SharedPreferences prefs = getContext().getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    SharedPreferences prefs = getSharedPreferences();
 
     if (value == null) {
       boolean success = prefs.edit().putString(key, null).commit();

@@ -1,4 +1,4 @@
 {
-  "name": "expo-secure-store",
+  "name": "expo-secure-store-prefix",
   "platforms": ["ios", "android"]
 }

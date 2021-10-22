@@ -1,6 +1,6 @@
 import { UnavailabilityError } from '@unimodules/core';
 
-import ExpoSecureStore from './ExpoSecureStore';
+import ExpoSecureStore from './ExpoSecureStorePrefix';
 
 export type KeychainAccessibilityConstant = number;
 
@@ -84,6 +84,12 @@ export type SecureStoreOptions = {
  */
 export async function isAvailableAsync(): Promise<boolean> {
   return !!ExpoSecureStore.getValueWithKeyAsync;
+}
+
+export async function initAsync(experienceId: string): Promise<void> {
+  if (!!ExpoSecureStore.initAsync) {
+    await ExpoSecureStore.initAsync(experienceId);
+  }
 }
 
 // @needsAudit
