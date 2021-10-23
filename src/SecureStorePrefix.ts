@@ -4,7 +4,8 @@ import { Platform } from 'react-native';
 import ExpoSecureStoreWithoutPrefix from './ExpoSecureStore';
 import ExpoSecureStorePrefix from './ExpoSecureStorePrefix';
 
-// iOS はネイティブレイヤーでは既存の ExpoSecureStore を使う。
+// Android: 専用の ExpoSecureStorePrefix を使う。
+// iOS: JS レイヤーで prefix 対応をするので、ネイティブレイヤーでは既存の ExpoSecureStore を使う。
 const ExpoSecureStore = Platform.OS === 'ios' ? ExpoSecureStoreWithoutPrefix : ExpoSecureStorePrefix;
 
 let prefix: string | undefined;
@@ -176,7 +177,7 @@ function _ensureValidKey(key: string) {
 }
 
 function _getNativeKey(key: string) {
-  // iOS はネイティブレイヤーでは既存の ExpoSecureStore を使うので、ここでキー対応。
+  // iOS はここで prefix 対応。
   return Platform.OS === 'ios' ? `${prefix}-${key}` : key;
 }
 
